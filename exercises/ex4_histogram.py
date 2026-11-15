@@ -10,12 +10,14 @@ imgOutput.Image = R                           ->  st.image(R)   (ຮູບເທ
 histogramBox1.GenerateHistograms(R, 256)      ->  cv2.calcHist(...) + Plotly bar chart
 MessageBox.Show("Gray from Red Channel")      ->  st.toast(...)
 Form1_Load: radioB.Checked = true             ->  ຄ່າເລີ່ມຕົ້ນ = Blue
+ຕາຕະລາງເມັດສີ (pixel table)                    ->  img[y0:y1, x0:x1] + pandas DataFrame (ສີພື້ນ = ສີ pixel)
 """
 import sys
 from pathlib import Path
 
 import cv2
 import numpy as np
+import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -47,6 +49,41 @@ def histogram_figure(channel_img: np.ndarray, name: str):
         xaxis_range=[-1, 256], bargap=0, height=330, margin=dict(l=10, r=10, t=40, b=10),
     )
     return fig
+# <<< CODE
+
+
+# >>> CODE: ຕາຕະລາງເມັດສີ (pixel table) ຂະໜາດ rows × columns ຂອງຮູບ
+STYLE_LIMIT = 40_000  # ໃສ່ສີພື້ນໄດ້ສະເພາະຕາຕະລາງ ≤ 40,000 ຊ່ອງ (ຕາຕະລາງໃຫຍ່ໃສ່ສີແລ້ວຊ້າຫຼາຍ)
+
+
+def _frame(channel: np.ndarray) -> pd.DataFrame:
+    """ແປງ matrix 2 ມິຕິ (rows × columns) ເປັນຕາຕະລາງ: ແຖວ = Row (Y), ຖັນ = Column (X)."""
+    rows, cols = channel.shape
+    return pd.DataFrame(channel, index=pd.RangeIndex(rows, name="Row (Y) \\ Col (X)"),
+                        columns=pd.RangeIndex(cols))
+
+
+@st.cache_data(show_spinner="ກຳລັງສ້າງຕາຕະລາງເມັດສີ...")
+def color_pixel_table(img: np.ndarray) -> pd.DataFrame:
+    """ຮູບສີ rows × columns: ຊ່ອງ [Y, X] = "B,G,R" ຂອງ pixel img[Y, X] (ລຳດັບຄື EmguCV)."""
+    B, G, R = (_frame(img[:, :, i]).astype(str) for i in range(3))
+    return B + "," + G + "," + R
+
+
+@st.cache_data(show_spinner="ກຳລັງສ້າງຕາຕະລາງເມັດສີ...")
+def gray_pixel_table(gray: np.ndarray) -> pd.DataFrame:
+    """ຮູບເທົາ rows × columns: ຊ່ອງ [Y, X] = ຄ່າຄວາມເຂັ້ມ (0–255) ຂອງ pixel gray[Y, X]."""
+    return _frame(gray)
+
+
+def colorize(table: pd.DataFrame, img: np.ndarray):
+    """ໃສ່ສີພື້ນຂອງແຕ່ລະຊ່ອງ = ສີຂອງ pixel ນັ້ນ (ຕົວອັກສອນດຳ/ຂາວ ຕາມຄວາມແຈ້ງ)."""
+    bgr = img if img.ndim == 3 else np.dstack([img] * 3)
+    B, G, R = (_frame(bgr[:, :, i]).astype(str) for i in range(3))
+    lum = 0.114 * bgr[:, :, 0] + 0.587 * bgr[:, :, 1] + 0.299 * bgr[:, :, 2]
+    fg = _frame(np.where(lum > 127, "black", "white"))
+    css = "background-color: rgb(" + R + "," + G + "," + B + "); color: " + fg
+    return table.style.apply(lambda _: css, axis=None)
 # <<< CODE
 
 
@@ -119,4 +156,37 @@ with main:
     st.subheader("histogramBox1")
     if selected:
         st.plotly_chart(histogram_figure(channel_map[selected], selected), width="stretch")
+    # <<< CODE
+
+    # ---------- ຕາຕະລາງເມັດສີ (pixel table) ຂອງ 2 ຮູບ ----------
+    st.divider()
+    st.subheader("ຕາຕະລາງເມັດສີ (Pixel Table)")
+    h, w = ori_image.shape[:2]
+
+    # >>> CODE: ສະແດງ pixel table (rows × columns) ຂອງຮູບສີ ແລະ ຮູບເທົາ
+    p1, p2 = st.columns([2, 1])
+    gray_options = (["imgOutput"] if selected else []) + ["Convert to Gray"]
+    gray_src = p1.radio("ຮູບເທົາ", gray_options, horizontal=True, captions=(
+        [f"Gray from {selected} Channel"] if selected else []) + ["cv2.cvtColor(BGR2GRAY)"])
+    gray_image = (channel_map[selected] if gray_src == "imgOutput"
+                  else cv2.cvtColor(ori_image, cv2.COLOR_BGR2GRAY))
+
+    rows, cols = gray_image.shape          # rows = ຄວາມສູງ (Y), columns = ຄວາມກວ້າງ (X)
+    n_cells = rows * cols
+    use_color = p2.toggle("ໃສ່ສີພື້ນຕາມຄ່າ pixel", value=n_cells <= STYLE_LIMIT,
+                          disabled=n_cells > STYLE_LIMIT,
+                          help=f"ໃຊ້ໄດ້ເມື່ອຮູບມີ ≤ {STYLE_LIMIT:,} pixels (ຕາຕະລາງໃຫຍ່ໃສ່ສີແລ້ວຊ້າຫຼາຍ)")
+    st.caption(f"ຕາຕະລາງ = **{rows} rows × {cols} columns = {n_cells:,} ຊ່ອງ** (1 ຊ່ອງ = 1 pixel). "
+               f"ແຖວ = Row (Y: 0–{rows - 1}), ຖັນ = Column (X: 0–{cols - 1}), ຊ່ອງ [Y, X] = img[Y, X]. "
+               "ເລື່ອນ (scroll) ຕາຕະລາງເພື່ອເບິ່ງທັງໝົດ.")
+
+    # 1) ຮູບສີ (Color image): rows × columns × 3 channels -> ຄ່າແຕ່ລະຊ່ອງ = B,G,R
+    st.markdown(f"**1. ຮູບສີ (Color Image) — {rows} × {cols} × 3, ຄ່າແຕ່ລະຊ່ອງ = `B,G,R`**")
+    color_table = color_pixel_table(ori_image)
+    st.dataframe(colorize(color_table, ori_image) if use_color else color_table, height=400)
+
+    # 2) ຮູບເທົາ (Gray image): rows × columns -> ຄ່າແຕ່ລະຊ່ອງ = Intensity 0–255
+    st.markdown(f"**2. ຮູບເທົາ (Gray Image) — {rows} × {cols}, ຄ່າແຕ່ລະຊ່ອງ = Intensity (0–255)**")
+    gray_table = gray_pixel_table(gray_image)
+    st.dataframe(colorize(gray_table, gray_image) if use_color else gray_table, height=400)
     # <<< CODE
