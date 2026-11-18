@@ -1,0 +1,8 @@
+[theme]
+# ຟອນລາວ: Noto Sans Lao (ໂຫຼດຈາກ Google Fonts -> ໃຊ້ໄດ້ທຸກເຄື່ອງ)
+#          -> Phetsarath OT (ຖ້າຕິດຕັ້ງໄວ້ໃນເຄື່ອງ) -> sans-serif
+# ຮູບແບບ: "<ລາຍຊື່ຟອນ>:<URL ຂອງ CSS>"  (ລາຍຊື່ຟອນຕ້ອງຢູ່ກ່ອນ ":" ທັງໝົດ)
+font = "Noto Sans Lao, Phetsarath OT, sans-serif:https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap"
+
+# Code: ຕົວອັກສອນລາຕິນໃຊ້ Source Code Pro (ຟອນ code ຂອງ Streamlit), comment ພາສາລາວໃຊ້ຟອນລາວ
+codeFont = "Source Code Pro, Noto Sans Lao, Phetsarath OT, monospace"
