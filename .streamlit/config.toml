@@ -1,8 +1,27 @@
 [theme]
+base = "light"
+
+# ສີທັງໝົດມາຈາກແຜ່ນທຽບສີ ColorChecker (24 patches) ທີ່ໃຊ້ calibrate ກ້ອງ ແລະ ສີໃນວຽກ Computer Vision
+backgroundColor = "#F3F3F2"           # White patch
+secondaryBackgroundColor = "#E4E4E1"  # ອ່ອນກວ່າ Neutral 8
+textColor = "#343434"                 # Black patch
+primaryColor = "#505BA6"              # Purplish blue
+linkColor = "#505BA6"
+borderColor = "#C8C8C8"               # Neutral 8
+dataframeBorderColor = "#C8C8C8"
+showWidgetBorder = true
+baseRadius = "0.3rem"
+chartCategoricalColors = ["#AF363C", "#469449", "#383D96", "#D67E2C", "#BB5695", "#0885A1"]
+
 # ຟອນລາວ: Noto Sans Lao (ໂຫຼດຈາກ Google Fonts -> ໃຊ້ໄດ້ທຸກເຄື່ອງ)
 #          -> Phetsarath OT (ຖ້າຕິດຕັ້ງໄວ້ໃນເຄື່ອງ) -> sans-serif
 # ຮູບແບບ: "<ລາຍຊື່ຟອນ>:<URL ຂອງ CSS>"  (ລາຍຊື່ຟອນຕ້ອງຢູ່ກ່ອນ ":" ທັງໝົດ)
 font = "Noto Sans Lao, Phetsarath OT, sans-serif:https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap"
+headingFontSizes = ["2.25rem", "1.5rem", "1.25rem", "1.1rem"]
+headingFontWeights = [600, 600, 600, 600]
 
 # Code: ຕົວອັກສອນລາຕິນໃຊ້ Source Code Pro (ຟອນ code ຂອງ Streamlit), comment ພາສາລາວໃຊ້ຟອນລາວ
 codeFont = "Source Code Pro, Noto Sans Lao, Phetsarath OT, monospace"
+
+[theme.sidebar]
+backgroundColor = "#E4E4E1"

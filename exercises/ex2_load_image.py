@@ -15,9 +15,10 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent))
 from code_viewer import show_code_button  # noqa: E402
+from ui import page_header  # noqa: E402
 
 st.set_page_config(page_title="Ex2 - Load Image", layout="wide")
-st.title("ບົດຝຶກຫັດ 2: ທົດລອງ Load ຮູບພາບ")
+page_header(2)
 st.caption("ທຽບເທົ່າ C#: `btnLoad` (Button) + `imageBox1` (ImageBox)")
 show_code_button(__file__)
 

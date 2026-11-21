@@ -25,10 +25,10 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent))
 from code_viewer import show_code_button  # noqa: E402
+from ui import page_header  # noqa: E402
 
 st.set_page_config(page_title="Ex5 - Thresholding", layout="wide")
-st.title("ບົດຝຶກຫັດ 5: ຮັບຄ່າຂໍ້ມູນພາບຂາວດຳຈາກຮູບພາບສີ")
-st.caption("Get Binary Image from Input Image")
+page_header(5)
 show_code_button(__file__)
 
 # ComboBox1 Items (Collection)

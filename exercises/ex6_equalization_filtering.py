@@ -28,15 +28,16 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent))
 from code_viewer import show_code_button  # noqa: E402
+from ui import page_header  # noqa: E402
 
 st.set_page_config(page_title="Ex6 - Equalization & Filtering", layout="wide")
-st.title("ບົດຝຶກຫັດ 6: ການປັບຄ່າຟິກເຊວຂອງຮູບພາບ ແລະ ການຕອງຮູບພາບ")
-st.caption("Histogram Equalization and Image Filtering — ລວມວຽກບ້ານ (ImageBox 3 ອັນ, Radio Button, ksize, Save, Exit)")
+page_header(6)
+st.caption("ລວມວຽກບ້ານ: ImageBox 3 ອັນ, Radio Button, ksize, Save ແລະ Exit")
 show_code_button(__file__)
 
 SOURCES = ["ຮູບພາບສີ", "ຮູບພາບສີເທົາ", "ຮູບເທົາຫຼັງ Equalization (ຕາມ code C#)"]
 OP_NAMES = {"equalize": "Histogram Equalization", "gaussian": "Gaussian Filter", "median": "Median Filter"}
-CHANNEL_COLORS = [("Blue", "#3e63dd"), ("Green", "#30a46c"), ("Red", "#e5484d")]  # ລຳດັບ B, G, R
+CHANNEL_COLORS = [("Blue", "#383D96"), ("Green", "#469449"), ("Red", "#AF363C")]  # ລຳດັບ B, G, R
 
 
 def read_bgr(uploaded) -> np.ndarray | None:
@@ -50,7 +51,7 @@ def histogram_figure(img: np.ndarray, title: str):
     fig = go.Figure()
     if img.ndim == 2:
         hist = cv2.calcHist([img], [0], None, [256], [0, 256]).ravel()
-        fig.add_bar(x=np.arange(256), y=hist, marker_color="#6f6f6f", marker_line_width=0, name="Gray",
+        fig.add_bar(x=np.arange(256), y=hist, marker_color="#555555", marker_line_width=0, name="Gray",
                     hovertemplate="Intensity: %{x}<br>Pixels: %{y:,}<extra></extra>")
     else:
         for i, (name, color) in enumerate(CHANNEL_COLORS):

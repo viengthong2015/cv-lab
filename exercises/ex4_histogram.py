@@ -23,13 +23,14 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent))
 from code_viewer import show_code_button  # noqa: E402
+from ui import page_header  # noqa: E402
 
 st.set_page_config(page_title="Ex4 - Histogram", layout="wide")
-st.title("ບົດຝຶກຫັດ 4: ທົດລອງນຳໃຊ້ ImageBox ແລະ HistogramBox")
+page_header(4)
 show_code_button(__file__)
 
 CHANNELS = ["Red", "Green", "Blue"]
-COLORS = {"Red": "#e5484d", "Green": "#30a46c", "Blue": "#3e63dd"}
+COLORS = {"Red": "#AF363C", "Green": "#469449", "Blue": "#383D96"}  # ສີ patch ColorChecker
 
 
 def read_bgr(uploaded) -> np.ndarray | None:

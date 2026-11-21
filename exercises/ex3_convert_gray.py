@@ -20,9 +20,10 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent))
 from code_viewer import show_code_button  # noqa: E402
+from ui import page_header  # noqa: E402
 
 st.set_page_config(page_title="Ex3 - Convert to Gray", layout="wide")
-st.title("ບົດຝຶກຫັດ 3: ປ່ຽນຮູບສີເປັນຮູບສີເທົາ (Grayscale)")
+page_header(3)
 show_code_button(__file__)
 
 MAX_DISPLAY_SIDE = 800  # ຮູບໃຫຍ່ຈະຖືກ sample ລົງເພື່ອໃຫ້ hover ໄວ (ພິກັດ X, Y ຍັງເປັນຂອງຮູບແທ້)

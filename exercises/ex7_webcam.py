@@ -26,10 +26,11 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent))
 from code_viewer import show_code_button  # noqa: E402
+from ui import page_header  # noqa: E402
 
 st.set_page_config(page_title="Ex7 - WebCam", layout="wide")
-st.title("ບົດຝຶກຫັດ 7: ການປະມວນຜົນພາບວິດີໂອຈາກ WebCam")
-st.caption("VDO Webcam Processing — ລວມວຽກບ້ານ (Simple / Adaptive Thresholding ຜ່ານ ComboBox)")
+page_header(7)
+st.caption("ລວມວຽກບ້ານ: Simple ແລະ Adaptive Thresholding ຜ່ານ ComboBox")
 show_code_button(__file__)
 
 # ComboBox ວຽກບ້ານ

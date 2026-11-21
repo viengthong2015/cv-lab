@@ -1,5 +1,5 @@
 """
-ບົດຝຶກຫັດ 8: ການກວດຈັບຂອບ (Edge Detection)
+ບົດຝຶກຫັດ 9: ການກວດຈັບຂອບ (Edge Detection)
 C# (EmguCV)                                          ->  Python (OpenCV + Streamlit)
 --------------------------------------------------------------------------------------
 MenuStrip: File (Open, Save, Exit), Edge (Canny, Sobel, Laplacian)
@@ -22,9 +22,10 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent))
 from code_viewer import show_code_button  # noqa: E402
+from ui import page_header  # noqa: E402
 
-st.set_page_config(page_title="Ex8 - Edge Detection", layout="wide")
-st.title("ບົດຝຶກຫັດ 8: ການກວດຈັບຂອບ (Edge Detection)")
+st.set_page_config(page_title="Ex9 - Edge Detection", layout="wide")
+page_header(9)
 show_code_button(__file__)
 
 OP_NAMES = {"canny": "Canny", "sobel": "Sobel", "laplacian": "Laplacian"}
@@ -63,8 +64,8 @@ def to_display(edge: np.ndarray, mode: str) -> np.ndarray:
 
 
 ss = st.session_state
-ss.setdefault("ex8_file_id", None)
-ss.setdefault("ex8_op", None)  # Edge ທີ່ເລືອກ: canny / sobel / laplacian (None = ສະແດງຮູບຕົ້ນສະບັບ)
+ss.setdefault("ex9_file_id", None)
+ss.setdefault("ex9_op", None)  # Edge ທີ່ເລືອກ: canny / sobel / laplacian (None = ສະແດງຮູບຕົ້ນສະບັບ)
 
 # ---------- MenuStrip: File | Edge ----------
 m1, m2, m3, _ = st.columns([1, 1, 2.2, 4])
@@ -76,17 +77,17 @@ with m1.popover("File", width="stretch"):
     save_slot = st.container()  # File > Save (ໃສ່ປຸ່ມພາຍຫຼັງ ເມື່ອມີຮູບຜົນລັບແລ້ວ)
     st.caption("**Exit**: ໃນ web app ບໍ່ມີ this.Close() — ປິດ tab browser ຫຼື ກົດ Ctrl+C ໃນ terminal.")
 
-if uploaded is not None and ss.ex8_file_id != uploaded.file_id:  # Open ຮູບໃໝ່ -> ສະແດງຮູບຕົ້ນສະບັບ
-    ss.ex8_file_id = uploaded.file_id
-    ss.ex8_op = None
+if uploaded is not None and ss.ex9_file_id != uploaded.file_id:  # Open ຮູບໃໝ່ -> ສະແດງຮູບຕົ້ນສະບັບ
+    ss.ex9_file_id = uploaded.file_id
+    ss.ex9_op = None
 
 with m2.popover("Edge", width="stretch", disabled=uploaded is None):
     # >>> CODE: Edge > Canny / Sobel / Laplacian  (if (imgInput == null) return;)
     for key, name in OP_NAMES.items():
         if st.button(name, key=f"menu_{key}", width="stretch"):
-            ss.ex8_op = key
+            ss.ex9_op = key
     if st.button("ຮູບຕົ້ນສະບັບ (Input)", key="menu_input", width="stretch"):
-        ss.ex8_op = None
+        ss.ex9_op = None
     # <<< CODE
 
 with m3.popover("⚙️ ປັບຄ່າ parameter", width="stretch"):
@@ -116,20 +117,20 @@ if img_input is None:
 
 compare = st.toggle("ສະແດງຮູບຕົ້ນສະບັບທຽບຂ້າງກັນ", value=True)
 
-if ss.ex8_op is None:
+if ss.ex9_op is None:
     shown, caption = img_input, f"imgInput — {uploaded.name}"
 else:
-    edge = detect_edges(img_input, ss.ex8_op, params)
+    edge = detect_edges(img_input, ss.ex9_op, params)
     shown = to_display(edge, display_mode)
-    caption = f"{OP_NAMES[ss.ex8_op]} — dtype {edge.dtype}"
+    caption = f"{OP_NAMES[ss.ex9_op]} — dtype {edge.dtype}"
     if edge.dtype != np.uint8:
         caption += f", ຄ່າຈິງ {edge.min():.0f} ຫາ {edge.max():.0f} → ສະແດງແບບ {display_mode}"
 
-if compare and ss.ex8_op is not None:
+if compare and ss.ex9_op is not None:
     c1, c2 = st.columns(2)
     c1.markdown("**imgInput**")
     c1.image(img_input, channels="BGR", width="stretch")
-    c2.markdown(f"**imageBox1 — {OP_NAMES[ss.ex8_op]}**")
+    c2.markdown(f"**imageBox1 — {OP_NAMES[ss.ex9_op]}**")
     c2.image(shown, width="stretch", caption=caption)
 else:
     st.markdown("**imageBox1**")
@@ -139,7 +140,7 @@ else:
 with save_slot:
     # >>> CODE: File > Save  (saveToolStripMenuItem_Click: jpg / png / bmp)
     fmt = st.selectbox("ຮູບແບບ file", ["jpg", "png", "bmp"])
-    name = OP_NAMES.get(ss.ex8_op, "input").lower()
+    name = OP_NAMES.get(ss.ex9_op, "input").lower()
     st.download_button("Save", data=cv2.imencode("." + fmt, shown)[1].tobytes(),
                        file_name=f"{name}.{fmt}", mime=f"image/{'jpeg' if fmt == 'jpg' else fmt}",
                        width="stretch", on_click=lambda: st.toast("Saving Complete"))
