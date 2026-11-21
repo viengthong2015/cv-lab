@@ -14,6 +14,7 @@ pages = [
     st.Page("exercises/ex5_thresholding.py", title="ບົດຝຶກຫັດ 5: Thresholding", icon="🔲"),
     st.Page("exercises/ex6_equalization_filtering.py", title="ບົດຝຶກຫັດ 6: Equalization & Filtering", icon="🎚️"),
     st.Page("exercises/ex7_webcam.py", title="ບົດຝຶກຫັດ 7: WebCam", icon="📷"),
+    st.Page("exercises/ex8_edge_detection.py", title="ບົດຝຶກຫັດ 8: Edge Detection", icon="✏️"),
 ]
 
 st.navigation(pages).run()
