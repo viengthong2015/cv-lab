@@ -9,6 +9,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from ui import EXERCISES, page_header  # noqa: E402
 
 st.set_page_config(page_title="Computer Vision Lab", layout="wide")
+
+
 page_header(None, "ຫ້ອງທົດລອງ Computer Vision", "ບົດຝຶກຫັດ EmguCV (C#) ທີ່ແປງມາເປັນ Python + OpenCV")
 
 patches = "".join(
@@ -22,6 +24,8 @@ patches = "".join(
 
 st.html(f"""
 <style>
+  .cv-student {{ margin: 1rem 0 0; font-size: 1rem; line-height: 1.6; color: #5A5A59; }}
+  .cv-student strong {{ color: #343434; font-weight: 600; }}
   .cv-lede {{ max-width: 44rem; margin: 1.25rem 0 1.5rem; font-size: 1rem; line-height: 1.6; color: #343434; }}
   .cv-board-wrap {{ container-type: inline-size; }}
   .cv-board {{ background: #262626; border-radius: 0.6rem; padding: 12px;
@@ -35,6 +39,7 @@ st.html(f"""
   .cv-patch-en {{ font-size: 0.8rem; line-height: 1.35; }}
   @container (max-width: 720px) {{ .cv-board {{ grid-template-columns: repeat(2, minmax(0, 1fr)); }} }}
 </style>
+<p class="cv-student">ນັກສຶກສາ: <strong>ວຽງທອງ ຈົ່ງຫວາຊົ່ງ</strong></p>
 <p class="cv-lede">ເລືອກບົດຝຶກຫັດຈາກແຜ່ນລຸ່ມນີ້ ຫຼື ຈາກເມນູດ້ານຊ້າຍ.
 ທຸກໜ້າມີປຸ່ມ <strong>ສະແດງ code ສຳຄັນ</strong> ເພື່ອເບິ່ງ code Python ທຽບກັບ code C# ຂອງບົດຮຽນ.</p>
 <div class="cv-board-wrap"><nav class="cv-board" aria-label="ລາຍການບົດຝຶກຫັດ">{patches}</nav></div>
